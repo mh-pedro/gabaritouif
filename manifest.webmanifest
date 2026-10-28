@@ -1,0 +1,15 @@
+{
+  "name": "GabaritouIF",
+  "short_name": "GabaritouIF",
+  "description": "Questões de legislação para concursos dos IFs",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ECEFF3",
+  "theme_color": "#2D47A6",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

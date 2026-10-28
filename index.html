@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GabaritouIF</title>
+<meta name="description" content="Questões de legislação para concursos dos IFs, com revisão espaçada e análise de desempenho.">
+<meta name="theme-color" content="#2D47A6">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one narrow "cartão-resposta" column; alternatives A–E are bubbles; analysis reads like a boletim */
+:root{
+  --bg:#ECEFF3; --sheet:#FFFFFF; --ink:#17202C; --muted:#5B6676; --line:#D3D9E2;
+  --accent:#2D47A6; --accent-soft:#E1E7F9; --on-accent:#FFFFFF;
+  --ok:#157A54; --ok-soft:#DCF2E7; --bad:#B93A2C; --bad-soft:#FAE3DF; --warn:#A86A12; --warn-soft:#FBEFD9;
+  --display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10151C; --sheet:#19202A; --ink:#E6EBF1; --muted:#98A3B3; --line:#2B3543;
+  --accent:#8FA6FF; --accent-soft:#222E52; --on-accent:#0D1430;
+  --ok:#4CC28A; --ok-soft:#163427; --bad:#FF7D6E; --bad-soft:#3C1E1B; --warn:#E8B25C; --warn-soft:#3A2D16; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#10151C; --sheet:#19202A; --ink:#E6EBF1; --muted:#98A3B3; --line:#2B3543;
+  --accent:#8FA6FF; --accent-soft:#222E52; --on-accent:#0D1430;
+  --ok:#4CC28A; --ok-soft:#163427; --bad:#FF7D6E; --bad-soft:#3C1E1B; --warn:#E8B25C; --warn-soft:#3A2D16; color-scheme:dark }
+
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:640px;margin:0 auto;padding-block:14px 48px;display:flex;flex-direction:column;gap:18px}
+header.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font:800 1.4rem/1.1 var(--display);letter-spacing:-.02em;display:flex;align-items:center;gap:9px;background:none;border:0;color:var(--ink);cursor:pointer;padding:4px 0;min-height:0;text-align:left}
+.brand i{flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);display:inline-block;box-shadow:inset 0 0 0 3px var(--bg),0 0 0 2px var(--accent)}
+.brand small{font:500 .7rem/1 var(--mono);color:var(--muted);letter-spacing:.06em;text-transform:uppercase;display:block;margin-top:3px}
+.chip{font:500 .72rem/1 var(--mono);letter-spacing:.03em;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:6px 10px;white-space:nowrap}
+.chip.ok{color:var(--ok);border-color:currentColor}
+.chip.bad{color:var(--bad);border-color:currentColor}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:1.6rem;font-weight:800;line-height:1.15}
+h2{font-size:1.1rem;font-weight:600}
+.label{font:500 .72rem/1.3 var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.muted{color:var(--muted)}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.between{justify-content:space-between}
+button{font:600 .95rem/1.2 var(--body);border-radius:10px;border:1px solid var(--line);background:var(--sheet);color:var(--ink);padding:12px 16px;cursor:pointer;min-height:44px}
+button:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn-ghost{background:transparent}
+.btn-danger{color:var(--bad);border-color:var(--bad);background:transparent}
+.btn-block{width:100%}
+.btn-sm{padding:7px 12px;min-height:36px;font-size:.85rem}
+button:disabled{opacity:.45;cursor:not-allowed}
+.tnum{font-variant-numeric:tabular-nums;font-family:var(--mono)}
+
+/* tabs */
+.tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--line);border-radius:12px;padding:3px;gap:3px}
+.tabs button{border:0;background:transparent;min-height:40px;border-radius:9px;color:var(--muted)}
+.tabs button[aria-selected="true"]{background:var(--sheet);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+/* filter chips */
+.fgroup{display:flex;flex-direction:column;gap:8px}
+.fgroup .head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{font:500 .84rem/1.2 var(--body);padding:7px 11px;min-height:34px;border-radius:99px;background:transparent;color:var(--ink)}
+.fchip[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.fchip .n{font:400 .72rem var(--mono);color:var(--muted);margin-left:4px}
+.fchip[aria-pressed="true"] .n{color:var(--accent)}
+.linkbtn{background:none;border:0;padding:0;min-height:0;font:500 .78rem var(--mono);color:var(--accent);cursor:pointer}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{flex:1 1 auto;padding:9px 10px;min-height:40px;font-size:.86rem}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.avail{font-size:.9rem}
+
+/* stats */
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kpi{background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi b{display:block;font:600 1.4rem/1.1 var(--mono);font-variant-numeric:tabular-nums;margin-top:6px}
+.kpi small{color:var(--muted);font-size:.76rem}
+.mastery{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--line)}
+.mastery span{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) 92px 46px;gap:10px;align-items:center;font-size:.9rem;padding:8px 0;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;border-radius:0;text-align:left;font-weight:400;min-height:0;width:100%;color:var(--ink)}
+.trow:first-of-type{border-top:0}
+.trow .nm{min-width:0;overflow-wrap:anywhere;display:flex;flex-direction:column}
+.trow .nm small{color:var(--muted);font:400 .74rem var(--mono)}
+button.trow:hover .nm span{color:var(--accent)}
+.chart{width:100%;height:auto;display:block}
+details.q{border-top:1px solid var(--line);padding:10px 0}
+details.q:first-of-type{border-top:0}
+details.q summary{cursor:pointer;list-style:none;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:start}
+details.q summary::-webkit-details-marker{display:none}
+details.q .qt{font-size:.92rem;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+details.q[open] .qt{display:block}
+details.q .body{margin-top:8px;font-size:.9rem;display:flex;flex-direction:column;gap:6px;color:var(--muted)}
+details.q .body b{color:var(--ink);font-weight:600}
+.pill{font:500 .74rem/1.1 var(--mono);padding:5px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent);white-space:nowrap}
+.pill.due{background:var(--warn-soft);color:var(--warn)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.pill.plain{background:var(--bg);color:var(--muted)}
+
+/* study */
+.progress{height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.progress span{display:block;height:100%;background:var(--accent);transition:width .25s}
+.src{font:500 .76rem/1.4 var(--mono);color:var(--muted)}
+.qtext{font:500 1.06rem/1.55 var(--body);overflow-wrap:anywhere}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;align-items:center;text-align:left;font-weight:400;padding:12px 14px;line-height:1.45;border-radius:12px;font-size:.96rem}
+.opt .bub{width:32px;height:32px;border-radius:50%;border:2px solid var(--muted);display:grid;place-items:center;font:500 .85rem var(--mono);color:var(--muted);transition:background .15s}
+.opt:hover:not(:disabled) .bub{border-color:var(--accent);color:var(--accent)}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.sel .bub{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.opt.ok{background:var(--ok-soft);border-color:var(--ok)}
+.opt.ok .bub{background:var(--ok);border-color:var(--ok);color:var(--sheet)}
+.opt.bad{background:var(--bad-soft);border-color:var(--bad)}
+.opt.bad .bub{background:var(--bad);border-color:var(--bad);color:var(--sheet)}
+.opt:disabled{cursor:default;opacity:1}
+.opt.dim:disabled{opacity:.55}
+.feedback{border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:.95rem}
+.feedback.ok{background:var(--ok-soft)}
+.feedback.bad{background:var(--bad-soft)}
+.feedback strong{font-family:var(--display)}
+.star{background:none;border:0;min-height:36px;padding:6px 8px;font-size:1.25rem;line-height:1;color:var(--muted)}
+.star[aria-pressed="true"]{color:var(--warn)}
+.stickybar{position:sticky;bottom:0;padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,var(--bg) 70%,transparent)}
+.score{font:800 3.4rem/1 var(--display);letter-spacing:-.03em}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:.9rem;z-index:20;max-width:calc(100% - 40px)}
+@media (max-width:420px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.kpi:first-child{grid-column:1/-1}.trow{grid-template-columns:minmax(0,1fr) 64px 42px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body{margin:0}
+[hidden]{display:none!important}
+.who{display:flex;align-items:center;gap:8px}
+.avatar{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font:600 .8rem var(--body);overflow:hidden;padding:0;min-height:0;cursor:pointer}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.menu{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:calc(60px + env(safe-area-inset-top,0px));background:var(--sheet);border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;z-index:15;box-shadow:0 8px 24px rgba(0,0,0,.18);min-width:220px;max-width:calc(100% - 32px)}
+.menu small{color:var(--muted);overflow-wrap:anywhere}
+.hero{text-align:center;padding:36px 22px;align-items:center}
+.hero .bubbles{display:flex;justify-content:center;gap:10px}
+.hero .bubbles span{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);font:500 .8rem/24px var(--mono);color:var(--muted)}
+.hero .bubbles span.f{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px}
+.gbtn svg{width:18px;height:18px;flex:none}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:22px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.err{color:var(--bad);font-size:.88rem;margin:0}
+ul.issues{color:var(--bad);font-size:.85rem;margin:0;padding-left:18px;text-align:left}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <button class="brand" data-act="home" aria-label="Início"><i></i><span>GabaritouIF<small id="bankinfo"></small></span></button>
+    <div class="who"><span class="chip" id="sync">carregando…</span><button class="avatar" id="avatar" data-act="menu" aria-label="Conta" hidden></button></div>
+  </header>
+  <div class="menu" id="menu" hidden></div>
+  <main id="app" class="stack"></main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script type="module">
+import {initializeApp} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+import {getAuth,GoogleAuthProvider,signInWithPopup,signInWithRedirect,getRedirectResult,onAuthStateChanged,signOut} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+import {initializeFirestore,persistentLocalCache,persistentMultipleTabManager,doc,onSnapshot,setDoc} from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+
+const firebaseConfig={
+  apiKey:"AIzaSyCVABFPJEo-Eo21d9-L2ObTwHuUKBxKXx0",
+  authDomain:"gabaritouif.firebaseapp.com",
+  projectId:"gabaritouif",
+  storageBucket:"gabaritouif.firebasestorage.app",
+  messagingSenderId:"573133749082",
+  appId:"1:573133749082:web:a08d8a013f553435a79163"
+};
+const fb=initializeApp(firebaseConfig);
+const auth=getAuth(fb);
+let db;
+try{db=initializeFirestore(fb,{localCache:persistentLocalCache({tabManager:persistentMultipleTabManager()})})}
+catch(e){db=initializeFirestore(fb,{})}
+
+/* ---------- constants & helpers ---------- */
+const DIF=['Fácil','Médio','Difícil'],DIFMAP={'fácil':0,'facil':0,'médio':1,'medio':1,'difícil':2,'dificil':2};
+const ORIG={prova_oficial:'Prova oficial',prova_citada_no_simulado:'Prova oficial',inedita:'Inédita',questao_inedita_do_simulado:'Inédita',simulado_enviado:'Simulado',banco_csv_usuario:'Banco próprio'};
+const DAY=864e5,INTERVALS=[0,1,2,4,8,16],LS_PREF='gabaritouif.prefs',L='ABCDE';
+const $=id=>document.getElementById(id);
+const app=$('app'),syncEl=$('sync'),toastEl=$('toast'),menuEl=$('menu'),avatarEl=$('avatar');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rich=s=>esc(s).replace(/&lt;br\s*\/?&gt;/gi,'<br>');
+const pct=(a,b)=>b?Math.round(100*a/b):null;
+const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const accColor=p=>p==null?'var(--line)':p<50?'var(--bad)':p<75?'var(--warn)':'var(--ok)';
+const gabLabel=g=>g==='oficial'?'gabarito oficial':g.startsWith('conferido_no_texto_legal')?'conferido no texto legal':g?'gabarito do material':'';
+function toast(msg){toastEl.textContent=msg;toastEl.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>toastEl.hidden=true,2800)}
+const GLOGO='<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+
+/* ---------- CSV ---------- */
+function parseCSV(text){
+  const rows=[];let row=[],f='',q=false,i=0;text=text.replace(/^﻿/,'');
+  const sep=(text.split('\n')[0].split(';').length>text.split('\n')[0].split(',').length)?';':',';
+  while(i<text.length){
+    const c=text[i];
+    if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c==='"')q=true;
+    else if(c===sep){row.push(f);f=''}
+    else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';if(row.some(x=>x.trim()))rows.push(row);row=[]}
+    else f+=c;
+    i++;
+  }
+  row.push(f);if(row.some(x=>x.trim()))rows.push(row);
+  return rows;
+}
+function csvToBank(text){
+  const rows=parseCSV(text),issues=[];
+  if(rows.length<2) return {bank:[],issues:['O arquivo está vazio ou não é um CSV.']};
+  const h=rows[0].map(x=>x.trim().toLowerCase());
+  const need=['id','assunto','questao','a','b','resposta'];
+  const miss=need.filter(k=>!h.includes(k));
+  if(miss.length) return {bank:[],issues:['Colunas obrigatórias faltando: '+miss.join(', ')+'. O cabeçalho esperado é: id,assunto,tema,dificuldade,questao,A,B,C,D,E,resposta,explicacao,tags']};
+  const col=k=>h.indexOf(k),get=(r,k)=>col(k)<0?'':(r[col(k)]||'').trim();
+  const bank=[],seen=new Set();
+  rows.slice(1).forEach((r,n)=>{
+    const id=get(r,'id')||('q'+(n+1));
+    const opts=['a','b','c','d','e'].map(k=>get(r,k)).filter(Boolean);
+    const c=L.indexOf(get(r,'resposta').toUpperCase().slice(0,1));
+    const q=get(r,'questao');
+    if(!q||opts.length<2||c<0||c>=opts.length){issues.push(`Linha ${n+2} (${id}): faltam enunciado, alternativas ou resposta válida.`);return}
+    if(seen.has(id)){issues.push(`Linha ${n+2}: id repetido "${id}", ignorada.`);return}
+    seen.add(id);
+    const tg={};get(r,'tags').split(/\s+/).forEach(t=>{const k=t.indexOf('::');if(k>0){const key=t.slice(0,k);if(!(key in tg))tg[key]=t.slice(k+2)}});
+    const keep={};['banca','ano','origem','gabarito','IF'].forEach(k=>{if(tg[k])keep[k]=tg[k]});
+    bank.push([id,get(r,'assunto')||'Sem assunto',get(r,'tema'),DIFMAP[get(r,'dificuldade').toLowerCase()]??1,q,opts,c,get(r,'explicacao'),keep]);
+  });
+  return {bank,issues};
+}
+
+/* ---------- state ---------- */
+let user=null,progressRef=null,bankRef=null,unsubs=[];
+let BANK=[],BY={},LEIS=[],ORIGS=[],bankMeta=null;
+let P={stats:{},sessions:[],stars:[]};
+let phase='boot',gotProgress=false,gotBank=false,timer=null,pendingSync=false;
+let view='home',tab='estudar',session=null,confirmReset=false,importState=null;
+let prefs={mode:'review',leis:[],dif:[],orig:[],qty:20,fb:'now'};
+try{const p=JSON.parse(localStorage.getItem(LS_PREF)||'null');if(p)prefs=Object.assign(prefs,p)}catch(e){}
+function savePrefs(){try{localStorage.setItem(LS_PREF,JSON.stringify(prefs))}catch(e){}}
+
+function setBank(raw){
+  BANK=(raw||[]).map(r=>{
+    const [id,a,t,d,q,o,c,e,tg]=r;
+    let src='',text=q;const m=q.match(/^\s*\[([^\]]{3,160})\]\s*/);if(m){src=m[1];text=q.slice(m[0].length)}
+    return {id,a,t,d,q:text,src,o,c,e,banca:(tg&&tg.banca)||'',orig:ORIG[tg&&tg.origem]||'Outra',gab:(tg&&tg.gabarito)||''};
+  });
+  BY=Object.fromEntries(BANK.map(q=>[q.id,q]));
+  const cnt={};BANK.forEach(q=>cnt[q.a]=(cnt[q.a]||0)+1);
+  LEIS=Object.keys(cnt).sort((x,y)=>cnt[y]-cnt[x]);
+  ORIGS=[...new Set(BANK.map(q=>q.orig))];
+  prefs.leis=prefs.leis.filter(x=>cnt[x]);prefs.orig=prefs.orig.filter(x=>ORIGS.includes(x));
+  $('bankinfo').textContent=BANK.length?BANK.length+' questões · '+LEIS.length+' normas':'';
+}
+
+function setSync(){
+  if(!user){syncEl.hidden=true;return}
+  syncEl.hidden=false;
+  if(!navigator.onLine){syncEl.className='chip';syncEl.textContent='offline';return}
+  if(pendingSync||timer){syncEl.className='chip';syncEl.textContent='sincronizando…';return}
+  syncEl.className='chip ok';syncEl.textContent='sincronizado';
+}
+addEventListener('online',setSync);addEventListener('offline',setSync);
+function persist(){clearTimeout(timer);timer=setTimeout(flush,800);setSync()}
+function flush(){
+  timer=null;if(!progressRef)return;
+  setDoc(progressRef,JSON.parse(JSON.stringify(P))).catch(e=>{console.error(e);syncEl.className='chip bad';syncEl.textContent='erro ao salvar';toast('Não consegui salvar: '+(e.code||e.message))});
+  setSync();
+}
+addEventListener('pagehide',()=>{if(timer){clearTimeout(timer);flush()}});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&timer){clearTimeout(timer);flush()}});
+
+/* ---------- auth ---------- */
+async function login(){
+  const prov=new GoogleAuthProvider();prov.setCustomParameters({prompt:'select_account'});
+  try{await signInWithPopup(auth,prov)}
+  catch(e){
+    if(e.code==='auth/popup-blocked'||e.code==='auth/operation-not-supported-in-this-environment'){await signInWithRedirect(auth,prov);return}
+    if(e.code==='auth/popup-closed-by-user'||e.code==='auth/cancelled-popup-request')return;
+    if(e.code==='auth/unauthorized-domain'){toast('Este endereço não está nos domínios autorizados do Firebase.');return}
+    toast('Não foi possível entrar: '+(e.code||e.message));
+  }
+}
+getRedirectResult(auth).catch(()=>{});
+onAuthStateChanged(auth,u=>{
+  unsubs.forEach(f=>f());unsubs=[];
+  user=u;gotProgress=gotBank=false;session=null;view='home';menuEl.hidden=true;
+  if(!u){phase='login';avatarEl.hidden=true;setBank([]);P={stats:{},sessions:[],stars:[]};setSync();render();return}
+  avatarEl.hidden=false;
+  avatarEl.innerHTML=u.photoURL?`<img src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer">`:esc((u.displayName||u.email||'?')[0].toUpperCase());
+  phase='loading';render();setSync();
+  progressRef=doc(db,'users',u.uid,'data','progress');
+  bankRef=doc(db,'users',u.uid,'data','bank');
+  unsubs.push(onSnapshot(progressRef,{includeMetadataChanges:true},snap=>{
+    pendingSync=snap.metadata.hasPendingWrites;
+    if(!timer){
+      const d=snap.exists()?snap.data():null;
+      P={stats:(d&&d.stats)||{},sessions:(d&&d.sessions)||[],stars:(d&&d.stars)||[]};
+    }
+    const first=!gotProgress;gotProgress=true;setSync();
+    if(first) ready(); else if(phase==='app'&&view==='home'&&!snap.metadata.hasPendingWrites) render();
+  },e=>fail(e)));
+  unsubs.push(onSnapshot(bankRef,snap=>{
+    const d=snap.exists()?snap.data():null;
+    bankMeta=d?{n:(d.questions||[]).length,at:d.updatedAt,name:d.fileName}:null;
+    let qs=[];try{qs=d&&d.questions?(typeof d.questions==='string'?JSON.parse(d.questions):d.questions):[]}catch(e){}
+    setBank(qs);
+    const first=!gotBank;gotBank=true;
+    if(first) ready(); else if(phase==='app'&&view!=='study') render();
+  },e=>fail(e)));
+});
+function ready(){if(gotProgress&&gotBank){phase='app';render()}}
+function fail(e){
+  console.error(e);phase='error';
+  app.innerHTML=`<section class="sheet stack"><h2>Não consegui acessar seus dados</h2><p class="muted" style="margin:0">${e.code==='permission-denied'?'O Firestore recusou o acesso. Confira se as regras de segurança foram publicadas no console do Firebase.':'Erro: '+esc(e.code||e.message)}</p><button data-act="reload">Tentar de novo</button></section>`;
+}
+
+/* ---------- views ---------- */
+function render(){
+  if(phase==='boot'||phase==='loading'){app.innerHTML=`<div class="sheet hero stack"><div class="bubbles"><span>A</span><span class="f">B</span><span>C</span><span>D</span></div><p class="muted" style="margin:0">${phase==='boot'?'Abrindo…':'Carregando seu progresso…'}</p></div>`;return}
+  if(phase==='login'){vLogin();return}
+  if(phase==='error')return;
+  if(!BANK.length||view==='import'){vImport();return}
+  ({home:vHome,study:vStudy,summary:vSummary})[view]();
+}
+function go(v){view=v;confirmReset=false;render();window.scrollTo(0,0)}
+
+function vLogin(){
+  app.innerHTML=`<section class="sheet hero stack">
+    <div class="bubbles"><span>A</span><span class="f">B</span><span>C</span><span>D</span><span>E</span></div>
+    <h1>Legislação para concursos dos IFs</h1>
+    <p class="muted" style="margin:0;max-width:44ch">Responda tocando na alternativa, revise o que errou no momento certo e veja seu desempenho por norma. O progresso fica salvo na sua conta e sincroniza entre celular e computador.</p>
+    <button class="btn-primary gbtn" data-act="login" style="margin-top:8px">${GLOGO}Entrar com Google</button>
+  </section>`;
+}
+
+function vImport(){
+  const has=BANK.length>0;
+  app.innerHTML=`<section class="sheet stack">
+    <span class="label">${has?'Atualizar banco de questões':'Primeiro acesso'}</span>
+    <h1>${has?'Importar uma nova versão do CSV':'Importe seu banco de questões'}</h1>
+    <p class="muted" style="margin:0">${has?`Hoje você tem <b class="tnum">${BANK.length}</b> questões${bankMeta&&bankMeta.name?' de '+esc(bankMeta.name):''}. A nova versão substitui o banco; seu histórico continua valendo para as questões com o mesmo <b>id</b>.`:'O banco fica guardado só na sua conta (não fica público no site). Basta importar uma vez, de qualquer aparelho.'}</p>
+    <label class="drop" id="drop" for="file">
+      <b>Escolher arquivo .csv</b>
+      <span class="muted" style="font-size:.86rem">ou arraste o arquivo para cá</span>
+      <input type="file" id="file" accept=".csv,text/csv,text/plain" hidden>
+    </label>
+    <div id="imp"></div>
+    <details><summary class="muted" style="cursor:pointer;font-size:.88rem">Formato esperado</summary>
+      <p class="muted" style="font-size:.86rem;margin:.6em 0 0">Cabeçalho <code>id,assunto,tema,dificuldade,questao,A,B,C,D,E,resposta,explicacao,tags</code>. A resposta é a letra (A a E). Nas tags, use <code>banca::FUNDATEC origem::prova_oficial gabarito::oficial</code> para os filtros e a análise por banca.</p></details>
+    ${has?'<button class="btn-ghost" data-act="home">Cancelar</button>':''}
+  </section>`;
+  const f=$('file'),dr=$('drop');
+  f.addEventListener('change',()=>f.files[0]&&readFile(f.files[0]));
+  dr.addEventListener('dragover',e=>{e.preventDefault();dr.classList.add('over')});
+  dr.addEventListener('dragleave',()=>dr.classList.remove('over'));
+  dr.addEventListener('drop',e=>{e.preventDefault();dr.classList.remove('over');e.dataTransfer.files[0]&&readFile(e.dataTransfer.files[0])});
+  if(importState) showImport();
+}
+function readFile(file){
+  const r=new FileReader();
+  r.onload=()=>{let t=r.result;if(t.includes('�')){const r2=new FileReader();r2.onload=()=>{importState={name:file.name,...csvToBank(r2.result)};showImport()};r2.readAsText(file,'windows-1252');return}
+    importState={name:file.name,...csvToBank(t)};showImport()};
+  r.readAsText(file,'utf-8');
+}
+function showImport(){
+  const {bank,issues,name}=importState,el=$('imp');if(!el)return;
+  const known=bank.filter(r=>P.stats[r[0]]).length;
+  el.innerHTML=`<div class="stack" style="gap:8px">
+    <p style="margin:0"><b class="tnum">${bank.length}</b> questões reconhecidas em <b>${esc(name)}</b>${BANK.length&&known?`, ${known} já com histórico`:''}.</p>
+    ${issues.length?`<ul class="issues">${issues.slice(0,8).map(i=>`<li>${esc(i)}</li>`).join('')}${issues.length>8?`<li>e mais ${issues.length-8}</li>`:''}</ul>`:''}
+    <button class="btn-primary btn-block" data-act="saveBank" ${bank.length?'':'disabled'}>${BANK.length?'Substituir banco':'Salvar na minha conta'}</button></div>`;
+}
+async function saveBank(btn){
+  const {bank,name}=importState;
+  const body={questions:JSON.stringify(bank),fileName:name,updatedAt:Date.now(),count:bank.length};
+  if(body.questions.length>950000){toast('O arquivo é grande demais para um único envio (limite de ~900 KB).');return}
+  btn.disabled=true;btn.textContent='Salvando…';
+  setDoc(bankRef,body).catch(e=>{toast('Erro ao salvar o banco: '+(e.code||e.message))});
+  setBank(bank);importState=null;toast(bank.length+' questões salvas na sua conta');go('home');
+}
+
+function vHome(){
+  const all=agg(BANK),now=Date.now();
+  const due=BANK.filter(q=>isDue(S(q.id),now)).length,fresh=BANK.filter(q=>!S(q.id)).length;
+  app.innerHTML=`
+  <div class="kpis">
+    <div class="kpi"><span class="label">Acerto geral</span><b>${all.acc==null?'–':all.acc+'%'}</b><small class="tnum">${all.r} certas · ${all.w} erradas</small></div>
+    <div class="kpi"><span class="label">Vistas</span><b>${all.seen}/${all.n}</b><small>${pct(all.seen,all.n)}% do banco</small></div>
+    <div class="kpi"><span class="label">Revisar hoje</span><b>${due}</b><small>${fresh} ainda não vistas</small></div>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="${tab==='estudar'}" data-act="tab" data-v="estudar">Estudar</button>
+    <button role="tab" aria-selected="${tab==='desempenho'}" data-act="tab" data-v="desempenho">Desempenho</button>
+  </div>
+  <div id="tabbody" class="stack"></div>`;
+  tab==='estudar'?vSetup():vStats();
+}
+const S=id=>P.stats[id]||null;
+const isDue=(s,now)=>s&&s.last!=null&&now>=s.last+INTERVALS[s.box||0]*DAY;
+const starred=id=>P.stars.includes(id);
+function agg(list){let r=0,w=0,seen=0;for(const q of list){const s=S(q.id);if(s){seen++;r+=s.r||0;w+=s.w||0}}return {n:list.length,r,w,seen,acc:pct(r,r+w)}}
+function filtered(){return BANK.filter(q=>(!prefs.leis.length||prefs.leis.includes(q.a))&&(!prefs.dif.length||prefs.dif.includes(q.d))&&(!prefs.orig.length||prefs.orig.includes(q.orig)))}
+function pool(mode,list){
+  const now=Date.now();
+  if(mode==='review'){const due=shuffle(list.filter(q=>isDue(S(q.id),now))).sort((a,b)=>(S(a.id).box||0)-(S(b.id).box||0));return due.concat(shuffle(list.filter(q=>!S(q.id))))}
+  if(mode==='new')return shuffle(list.filter(q=>!S(q.id)));
+  if(mode==='wrong')return list.filter(q=>{const s=S(q.id);return s&&s.w>0}).sort((a,b)=>{const x=S(a.id),y=S(b.id);return (y.w/(y.r+y.w))-(x.w/(x.r+x.w))});
+  if(mode==='star')return shuffle(list.filter(q=>starred(q.id)));
+  return shuffle(list.slice());
+}
+function chips(key,values,labelFn,countFn){
+  return values.map(v=>`<button class="fchip" data-act="f" data-k="${key}" data-v="${esc(String(v))}" aria-pressed="${prefs[key].includes(v)}">${esc(labelFn(v))}<span class="n">${countFn(v)}</span></button>`).join('');
+}
+function vSetup(){
+  const list=filtered(),p=pool(prefs.mode,list);
+  const qty=prefs.qty==='all'?p.length:Math.min(prefs.qty,p.length);
+  const modes=[['review','Revisão do dia'],['new','Não vistas'],['wrong','Só erradas'],['all','Todas'],['star','Marcadas ★']];
+  $('tabbody').innerHTML=`
+  <section class="sheet stack">
+    <div class="fgroup"><span class="label">O que estudar</span>
+      <div class="seg">${modes.map(([k,t])=>`<button data-act="mode" data-v="${k}" aria-pressed="${prefs.mode===k}">${t}</button>`).join('')}</div>
+      <span class="muted" style="font-size:.82rem">${{review:'Questões vencidas na repetição espaçada primeiro, depois as não vistas. As que você erra voltam no dia seguinte.',new:'Só questões que você nunca respondeu.',wrong:'Questões que você já errou, das mais erradas para as menos.',all:'Todas as questões do filtro, embaralhadas.',star:'Questões que você marcou com ★ durante o estudo.'}[prefs.mode]}</span>
+    </div>
+    <div class="fgroup"><div class="head"><span class="label">Norma</span>${prefs.leis.length?`<button class="linkbtn" data-act="clr" data-k="leis">limpar</button>`:''}</div>
+      <div class="fchips">${chips('leis',LEIS,v=>v,v=>BANK.filter(q=>q.a===v).length)}</div></div>
+    <div class="fgroup"><div class="head"><span class="label">Dificuldade</span>${prefs.dif.length?`<button class="linkbtn" data-act="clr" data-k="dif">limpar</button>`:''}</div>
+      <div class="fchips">${chips('dif',[0,1,2],v=>DIF[v],v=>BANK.filter(q=>q.d===v).length)}</div></div>
+    ${ORIGS.length>1?`<div class="fgroup"><div class="head"><span class="label">Origem</span>${prefs.orig.length?`<button class="linkbtn" data-act="clr" data-k="orig">limpar</button>`:''}</div>
+      <div class="fchips">${chips('orig',ORIGS,v=>v,v=>BANK.filter(q=>q.orig===v).length)}</div></div>`:''}
+    <div class="fgroup"><span class="label">Quantas questões</span>
+      <div class="seg">${[10,20,40,'all'].map(n=>`<button data-act="qty" data-v="${n}" aria-pressed="${String(prefs.qty)===String(n)}">${n==='all'?'Todas':n}</button>`).join('')}</div></div>
+    <div class="fgroup"><span class="label">Correção</span>
+      <div class="seg"><button data-act="fb" data-v="now" aria-pressed="${prefs.fb==='now'}">A cada questão</button><button data-act="fb" data-v="end" aria-pressed="${prefs.fb==='end'}">No final (modo prova)</button></div></div>
+  </section>
+  <div class="stickybar stack" style="gap:6px">
+    <span class="avail muted tnum">${p.length} questões disponíveis${list.length!==BANK.length?' (de '+list.length+' no filtro)':''}</span>
+    <button class="btn-primary btn-block" data-act="start" ${qty?'':'disabled'}>${qty?'Começar '+qty+' questões':'Nenhuma questão neste filtro'}</button>
+  </div>`;
+}
+function table(groups,startable){
+  return groups.map(([name,list,key,val])=>{const g=agg(list),p=g.acc;
+    const inner=`<span class="nm"><span>${esc(name)}</span><small>${g.seen}/${g.n} vistas${g.r+g.w?' · '+g.r+'✓ '+g.w+'✕':''}</small></span><div class="bar"><span style="width:${p??0}%;background:${accColor(p)}"></span></div><span class="tnum" style="text-align:right">${p==null?'–':p+'%'}</span>`;
+    return startable?`<button class="trow" data-act="focus" data-k="${key}" data-v="${esc(String(val))}" title="Estudar só esta">${inner}</button>`:`<div class="trow">${inner}</div>`}).join('');
+}
+function vStats(){
+  const lv=[0,0,0,0];BANK.forEach(q=>{const s=S(q.id);lv[!s?0:(s.box||0)<=1?1:(s.box||0)<=3?2:3]++});
+  const lvC=['var(--line)','var(--bad)','var(--warn)','var(--ok)'],lvN=['Não vistas','Aprendendo','Revisando','Dominadas'];
+  const byLei=LEIS.map(a=>[a,BANK.filter(q=>q.a===a),'leis',a]).sort((x,y)=>(agg(x[1]).acc??101)-(agg(y[1]).acc??101));
+  const byDif=[0,1,2].map(d=>[DIF[d],BANK.filter(q=>q.d===d),'dif',d]);
+  const bancas=[...new Set(BANK.map(q=>q.banca).filter(Boolean))].map(b=>[b.replace(/_/g,' '),BANK.filter(q=>q.banca===b)]).filter(x=>agg(x[1]).seen).sort((a,b)=>b[1].length-a[1].length);
+  const hard=BANK.filter(q=>{const s=S(q.id);return s&&s.w>0}).map(q=>({q,s:S(q.id)})).sort((a,b)=>(b.s.w/(b.s.r+b.s.w))-(a.s.w/(a.s.r+a.s.w))||b.s.w-a.s.w).slice(0,15);
+  const ses=P.sessions.slice(-20);
+  $('tabbody').innerHTML=`
+  <section class="sheet stack"><h2>Domínio do banco</h2>
+    <div class="mastery" role="img" aria-label="${lv.map((n,i)=>lvN[i]+': '+n).join(', ')}">${lv.map((n,i)=>n?`<span style="width:${100*n/BANK.length}%;background:${lvC[i]}"></span>`:'').join('')}</div>
+    <div class="legend">${lv.map((n,i)=>`<span><i style="background:${lvC[i]}"></i>${lvN[i]} <b class="tnum">${n}</b></span>`).join('')}</div></section>
+  <section class="sheet stack"><div class="row between"><h2>Acerto por sessão</h2><span class="label">últimas ${ses.length}</span></div>
+    ${ses.length?chart(ses):`<p class="muted" style="margin:0">Termine uma sessão para ver sua evolução aqui.</p>`}</section>
+  <section class="sheet stack"><div class="row between"><h2>Por norma</h2><span class="label">pior primeiro · toque para estudar</span></div><div>${table(byLei,true)}</div></section>
+  <section class="sheet stack"><h2>Por dificuldade</h2><div>${table(byDif,true)}</div></section>
+  ${bancas.length?`<section class="sheet stack"><h2>Por banca</h2><div>${table(bancas,false)}</div></section>`:''}
+  <section class="sheet stack"><h2>Questões que você mais erra</h2>
+    ${hard.length?`<div>${hard.map(({q,s})=>{
+      const picks=Object.entries(s.picks||{}).sort((a,b)=>b[1]-a[1]);
+      const fav=picks[0]&&q.o[+picks[0][0]]!=null?`<span>Você costuma marcar: <b>${L[+picks[0][0]]})</b> ${rich(q.o[+picks[0][0]])} (${picks[0][1]}×)</span>`:'';
+      return `<details class="q"><summary><span class="qt">${rich(q.q)}</span><span class="pill bad tnum">${s.w}✕ ${s.r}✓</span></summary>
+      <div class="body"><span class="label">${esc(q.a)} · ${esc(q.t)}</span><span>Correta: <b>${L[q.c]}) ${rich(q.o[q.c])}</b></span>${fav}${q.e?`<span>${rich(q.e)}</span>`:''}</div></details>`}).join('')}</div>
+    <button data-act="quick">Estudar as erradas</button>`:`<p class="muted" style="margin:0">Nenhum erro registrado ainda.</p>`}</section>
+  <section class="sheet stack"><h2>Progresso</h2>
+    ${confirmReset?`<div class="feedback bad"><strong>Zerar todo o progresso?</strong><span>Acertos, erros, revisões, sessões e marcadas serão apagados, em todos os aparelhos. As questões continuam.</span><div class="row"><button class="btn-danger" data-act="resetyes">Zerar</button><button data-act="resetno">Cancelar</button></div></div>`
+    :`<button class="btn-danger" data-act="reset" style="align-self:flex-start">Zerar estatísticas</button>`}</section>`;
+}
+function chart(ses){
+  const W=320,H=130,pl=30,pb=18,pt=8,pr=6,iw=W-pl-pr,ih=H-pt-pb,n=ses.length,bw=Math.min(22,iw/n*.7);
+  const y=v=>pt+ih*(1-v/100);
+  let g='';[0,50,100].forEach(v=>{g+=`<line x1="${pl}" x2="${W-pr}" y1="${y(v)}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${pl-6}" y="${y(v)+4}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono,monospace">${v}</text>`});
+  const bars=ses.map((s,i)=>{const p=s.n?100*s.ok/s.n:0,cx=pl+iw*(i+.5)/n;
+    return `<rect x="${cx-bw/2}" y="${y(p)}" width="${bw}" height="${Math.max(1,y(0)-y(p))}" rx="2" fill="${accColor(Math.round(p))}"><title>${new Date(s.t).toLocaleDateString('pt-BR')}: ${s.ok}/${s.n} (${Math.round(p)}%)</title></rect>`}).join('');
+  const last=ses[n-1];
+  return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Porcentagem de acerto nas últimas ${n} sessões">${g}${bars}<text x="${W-pr}" y="${H-4}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono,monospace">última: ${last.ok}/${last.n}</text></svg>`;
+}
+
+/* ---------- study ---------- */
+function start(ids,fb){
+  if(!ids.length){toast('Nenhuma questão para estudar agora.');return}
+  session={queue:ids,i:0,fb,first:{},again:new Set(),picked:null,answers:{},results:[]};go('study');
+}
+const curQ=()=>BY[session.queue[session.i]];
+function vStudy(){
+  const q=curQ();if(!q){go('home');return}
+  const total=session.queue.length,isRetry=session.queue.indexOf(q.id)<session.i;
+  const exam=session.fb==='end',answered=session.picked!==null,reveal=answered&&!exam,ok=answered&&session.picked===q.c;
+  app.innerHTML=`
+  <div class="stack" style="gap:8px">
+    <div class="row between"><span class="label tnum">${session.i+1} de ${total}${isRetry?' · nova tentativa':''}${exam?' · modo prova':''}</span>
+      <div class="row" style="gap:4px"><button class="star" data-act="star" aria-pressed="${starred(q.id)}" aria-label="Marcar questão">${starred(q.id)?'★':'☆'}</button><button class="btn-ghost btn-sm" data-act="end">Encerrar</button></div></div>
+    <div class="progress"><span style="width:${100*session.i/total}%"></span></div>
+  </div>
+  <section class="sheet stack">
+    <div class="row" style="gap:6px"><span class="pill">${esc(q.a)}</span><span class="pill plain">${DIF[q.d]}</span></div>
+    ${q.src?`<span class="src">${esc(q.src)}</span>`:''}
+    <div class="qtext">${rich(q.q)}</div>
+  </section>
+  <div class="opts">${q.o.map((txt,i)=>{
+    let cls='';if(reveal){cls=i===q.c?'ok':i===session.picked?'bad':'dim'}else if(answered&&i===session.picked)cls='sel';
+    return `<button class="opt ${cls}" data-act="pick" data-i="${i}" ${reveal?'disabled':''}><span class="bub">${L[i]}</span><span>${rich(txt)}</span></button>`}).join('')}</div>
+  ${reveal?`<div class="feedback ${ok?'ok':'bad'}"><strong>${ok?'Certo!':isRetry?'Errou de novo.':'Errou. Ela volta no fim desta sessão.'}</strong>${!ok?`<span>Correta: <b>${L[q.c]})</b> ${rich(q.o[q.c])}</span>`:''}${q.e?`<span>${rich(q.e)}</span>`:''}<span class="src">${esc(q.t)}${gabLabel(q.gab)?' · '+gabLabel(q.gab):''}</span></div>`:''}
+  ${answered?`<div class="stickybar"><button class="btn-primary btn-block" data-act="next">${session.i+1<total?'Próxima':exam?'Entregar e ver resultado':'Ver resultado'}</button></div>`:''}`;
+  if(!answered) window.scrollTo(0,0);
+}
+function pick(i){
+  const q=curQ(),exam=session.fb==='end';
+  if(session.picked!==null&&!exam)return;
+  session.picked=i;
+  if(exam){session.answers[q.id]=i;render();return}
+  record(q,i);
+  if(i!==q.c&&!session.again.has(q.id)){session.again.add(q.id);session.queue.push(q.id)}
+  render();
+}
+function record(q,i){
+  if(session.first[q.id]!==undefined)return;
+  const ok=i===q.c;session.first[q.id]=ok;session.results.push({id:q.id,ok,pick:i});
+  const s=P.stats[q.id]?{...P.stats[q.id],picks:{...(P.stats[q.id].picks||{})}}:{r:0,w:0,box:0,last:null,picks:{}};
+  if(ok){s.r++;s.box=Math.min(5,(s.box||0)+1)}else{s.w++;s.box=0;s.picks[i]=(s.picks[i]||0)+1}
+  s.last=Date.now();s.lastOk=ok;P.stats[q.id]=s;persist();
+}
+function next(){
+  if(session.fb==='end'&&session.picked!==null)session.answers[curQ().id]=session.picked;
+  session.i++;
+  if(session.i>=session.queue.length){finish();return}
+  session.picked=session.fb==='end'?(session.answers[curQ().id]??null):null;
+  render();window.scrollTo(0,0);
+}
+function finish(){
+  if(session.fb==='end'){for(const id of session.queue.slice(0,session.i)){const a=session.answers[id];if(a!=null&&BY[id])record(BY[id],a)}}
+  if(session.results.length){P.sessions=P.sessions.concat({t:Date.now(),n:session.results.length,ok:session.results.filter(r=>r.ok).length}).slice(-100);persist()}
+  go('summary');
+}
+function vSummary(){
+  const res=session.results.filter(r=>BY[r.id]),n=res.length,ok=res.filter(r=>r.ok).length,p=pct(ok,n);
+  const wrong=res.filter(r=>!r.ok).map(r=>({q:BY[r.id],pick:r.pick}));
+  const byLei={};res.forEach(r=>{const a=BY[r.id].a;byLei[a]=byLei[a]||[0,0];byLei[a][r.ok?0:1]++});
+  app.innerHTML=`
+  <section class="sheet stack" style="text-align:center;align-items:center">
+    <span class="label">Resultado da sessão</span>
+    <div class="score tnum" style="color:${p==null?'var(--muted)':accColor(p)}">${p==null?'–':p+'%'}</div>
+    <p class="muted tnum" style="margin:0">${ok} de ${n} certas${session.fb==='end'?'':' na primeira tentativa'}</p>
+  </section>
+  ${n?`<section class="sheet stack"><h2>Nesta sessão, por norma</h2><div>${Object.entries(byLei).sort((a,b)=>a[1][0]/(a[1][0]+a[1][1])-b[1][0]/(b[1][0]+b[1][1])).map(([a,[c,e]])=>{const pp=pct(c,c+e);return `<div class="trow"><span class="nm"><span>${esc(a)}</span><small>${c}✓ ${e}✕</small></span><div class="bar"><span style="width:${pp}%;background:${accColor(pp)}"></span></div><span class="tnum" style="text-align:right">${pp}%</span></div>`}).join('')}</div></section>`:''}
+  ${wrong.length?`<section class="sheet stack"><h2>Para rever</h2><div>${wrong.map(({q,pick})=>`<details class="q"><summary><span class="qt">${rich(q.q)}</span><span class="pill plain">${L[pick]}→${L[q.c]}</span></summary><div class="body"><span class="label">${esc(q.a)} · ${esc(q.t)}</span><span>Você marcou <b>${L[pick]})</b> ${rich(q.o[pick])}</span><span>Correta: <b>${L[q.c]})</b> ${rich(q.o[q.c])}</span>${q.e?`<span>${rich(q.e)}</span>`:''}</div></details>`).join('')}</div></section>`:''}
+  <div class="stack">
+    ${wrong.length?`<button class="btn-primary btn-block" data-act="redo">Refazer as ${wrong.length} erradas</button>`:''}
+    <button class="btn-block" data-act="home">Voltar ao painel</button>
+  </div>`;
+}
+
+/* ---------- account menu ---------- */
+function showMenu(){
+  if(!menuEl.hidden){menuEl.hidden=true;return}
+  menuEl.innerHTML=`<b>${esc(user.displayName||'Sua conta')}</b><small>${esc(user.email||'')}</small>
+    <button data-act="import">Atualizar banco (CSV)</button>
+    <button class="btn-ghost" data-act="logout">Sair</button>`;
+  menuEl.hidden=false;
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  if(!menuEl.hidden&&!e.target.closest('#menu')&&!e.target.closest('#avatar'))menuEl.hidden=true;
+  const b=e.target.closest('[data-act]');if(!b)return;
+  const a=b.dataset.act,v=b.dataset.v;
+  if(a==='login')login();
+  else if(a==='logout'){menuEl.hidden=true;if(timer){clearTimeout(timer);flush()}signOut(auth)}
+  else if(a==='menu')showMenu();
+  else if(a==='reload')location.reload();
+  else if(a==='import'){menuEl.hidden=true;importState=null;go('import')}
+  else if(a==='saveBank')saveBank(b);
+  else if(phase!=='app')return;
+  else if(a==='home'){if(view==='study'&&session&&(session.results.length||Object.keys(session.answers).length)){finish();return}go('home')}
+  else if(a==='tab'){tab=v;render()}
+  else if(a==='mode'){prefs.mode=v;savePrefs();vSetup()}
+  else if(a==='qty'){prefs.qty=v==='all'?'all':+v;savePrefs();vSetup()}
+  else if(a==='fb'){prefs.fb=v;savePrefs();vSetup()}
+  else if(a==='f'){const k=b.dataset.k,val=k==='dif'?+v:v,arr=prefs[k],ix=arr.indexOf(val);ix<0?arr.push(val):arr.splice(ix,1);savePrefs();vSetup()}
+  else if(a==='clr'){prefs[b.dataset.k]=[];savePrefs();vSetup()}
+  else if(a==='start'){const p=pool(prefs.mode,filtered());start(p.slice(0,prefs.qty==='all'?p.length:prefs.qty).map(q=>q.id),prefs.fb)}
+  else if(a==='focus'){const k=b.dataset.k;prefs.leis=[];prefs.dif=[];prefs.orig=[];prefs[k]=[k==='dif'?+v:v];if(prefs.mode==='star')prefs.mode='review';savePrefs();tab='estudar';render();window.scrollTo(0,0);toast('Filtro aplicado: '+(k==='dif'?DIF[+v]:v))}
+  else if(a==='quick')start(pool('wrong',BANK).slice(0,40).map(q=>q.id),'now');
+  else if(a==='pick')pick(+b.dataset.i);
+  else if(a==='next')next();
+  else if(a==='star'){const id=curQ().id,ix=P.stars.indexOf(id);P.stars=ix<0?P.stars.concat(id):P.stars.filter(x=>x!==id);persist();b.setAttribute('aria-pressed',ix<0);b.textContent=ix<0?'★':'☆'}
+  else if(a==='end'){if(session.results.length||Object.keys(session.answers).length||session.picked!==null){if(session.fb==='end'&&session.picked!==null){session.answers[curQ().id]=session.picked;session.i++}finish()}else go('home')}
+  else if(a==='redo')start(shuffle(session.results.filter(r=>!r.ok).map(r=>r.id)),'now');
+  else if(a==='reset'){confirmReset=true;render()}
+  else if(a==='resetno'){confirmReset=false;render()}
+  else if(a==='resetyes'){P={stats:{},sessions:[],stars:[]};persist();confirmReset=false;toast('Progresso zerado');render()}
+});
+document.addEventListener('keydown',e=>{
+  if(phase!=='app'||view!=='study'||e.target.matches('input,textarea'))return;
+  const k=e.key.toLowerCase(),q=curQ();if(!q)return;
+  const revealed=session.picked!==null&&session.fb!=='end';
+  let i='abcde'.indexOf(k);if(i<0)i='12345'.indexOf(k);
+  if(!revealed&&i>=0&&i<q.o.length){e.preventDefault();pick(i)}
+  else if((k==='enter'||k===' ')&&session.picked!==null){e.preventDefault();next()}
+});
+render();
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
