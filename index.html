@@ -621,7 +621,7 @@ document.addEventListener('keydown',e=>{
   else if((k==='enter'||k===' ')&&session.picked!==null){e.preventDefault();next()}
 });
 render();
-if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
 </script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(function(e){console.warn('SW',e)})}</script>
 </body>
 </html>
