@@ -4,7 +4,8 @@ App de estudo de legislação para concursos dos Institutos Federais: questões 
 
 - Site: https://mh-pedro.github.io/gabaritouif/
 - Login com Google (Firebase Authentication); progresso e banco de questões ficam no Firestore, na conta de cada usuário.
-- O banco de questões **não** fica neste repositório: cada usuário importa o próprio CSV pelo app.
+- O app não lê o banco direto daqui: cada usuário importa um CSV pela própria conta (avatar > Atualizar banco).
+- Banco público: [`banco/questoes.csv`](banco/questoes.csv), 218 questões de provas oficiais, inéditas e do banco próprio. Origem e autoria em [`banco/CREDITOS.md`](banco/CREDITOS.md).
 
 ## Formato do CSV
 
