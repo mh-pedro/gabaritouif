@@ -158,6 +158,19 @@ body{margin:0}
 .drop{border:2px dashed var(--line);border-radius:14px;padding:22px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center}
 .drop.over{border-color:var(--accent);background:var(--accent-soft)}
 .err{color:var(--bad);font-size:.88rem;margin:0}
+.infolinks{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.infolinks button{font-size:.88rem;padding:9px 14px;min-height:40px}
+.doc h2{margin-top:6px}
+.doc p,.doc li{margin:0;max-width:68ch}
+.doc ul,.doc ol{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.doc code{font:400 .85em var(--mono);background:var(--bg);padding:1px 5px;border-radius:4px}
+.ctable{overflow-x:auto}
+.ctable table{border-collapse:collapse;font-size:.86rem;min-width:480px;width:100%}
+.ctable th,.ctable td{text-align:left;padding:8px 10px;border-top:1px solid var(--line);vertical-align:top}
+.ctable th{font:500 .72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);border-top:0}
+.ctable td:first-child{font-family:var(--mono);white-space:nowrap}
+pre.csv{margin:0;font:400 .78rem/1.55 var(--mono);background:var(--bg);border-radius:10px;padding:12px;overflow-x:auto;white-space:pre}
+.backrow{display:flex;align-items:center;gap:8px}
 ul.issues{color:var(--bad);font-size:.85rem;margin:0;padding-left:18px;text-align:left}
 </style>
 </head>
@@ -335,6 +348,8 @@ function fail(e){
 /* ---------- views ---------- */
 function render(){
   if(phase==='boot'||phase==='loading'){app.innerHTML=`<div class="sheet hero stack"><div class="bubbles"><span>A</span><span class="f">B</span><span>C</span><span>D</span></div><p class="muted" style="margin:0">${phase==='boot'?'Abrindo…':'Carregando seu progresso…'}</p></div>`;return}
+  if(view==='about'){vAbout();return}
+  if(view==='csvhelp'){vCsvHelp();return}
   if(phase==='login'){vLogin();return}
   if(phase==='error')return;
   if(!BANK.length||view==='import'){vImport();return}
@@ -348,7 +363,8 @@ function vLogin(){
     <h1>Legislação para concursos dos IFs</h1>
     <p class="muted" style="margin:0;max-width:44ch">Responda tocando na alternativa, revise o que errou no momento certo e veja seu desempenho por norma. O progresso fica salvo na sua conta e sincroniza entre celular e computador.</p>
     <button class="btn-primary gbtn" data-act="login" style="margin-top:8px">${GLOGO}Entrar com Google</button>
-  </section>`;
+  </section>
+  <div class="infolinks"><button class="btn-ghost" data-act="about">Sobre o app</button><button class="btn-ghost" data-act="csvhelp">Como criar questões (CSV)</button></div>`;
 }
 
 function vImport(){
@@ -363,6 +379,7 @@ function vImport(){
       <input type="file" id="file" accept=".csv,text/csv,text/plain" hidden>
     </label>
     <div id="imp"></div>
+    <button class="btn-ghost" data-act="csvhelp">Como criar questões (CSV), com exemplo</button>
     <details><summary class="muted" style="cursor:pointer;font-size:.88rem">Formato esperado</summary>
       <p class="muted" style="font-size:.86rem;margin:.6em 0 0">Cabeçalho <code>id,assunto,tema,dificuldade,questao,A,B,C,D,E,resposta,explicacao,tags</code>. A resposta é a letra (A a E). Nas tags, use <code>banca::FUNDATEC origem::prova_oficial gabarito::oficial</code> para os filtros e a análise por banca.</p></details>
     ${has?'<button class="btn-ghost" data-act="home">Cancelar</button>':''}
@@ -412,6 +429,7 @@ function vHome(){
   </div>
   <div id="tabbody" class="stack"></div>`;
   tab==='estudar'?vSetup():vStats();
+  app.insertAdjacentHTML('beforeend','<div class="infolinks"><button class="btn-ghost" data-act="about">Sobre o app</button><button class="btn-ghost" data-act="csvhelp">Como criar questões (CSV)</button></div>');
 }
 const S=id=>P.stats[id]||null;
 const isDue=(s,now)=>s&&s.last!=null&&now>=s.last+INTERVALS[s.box||0]*DAY;
@@ -572,11 +590,94 @@ function vSummary(){
   </div>`;
 }
 
+
+/* ---------- info pages ---------- */
+let backView='home';
+const MODEL=`id,assunto,tema,dificuldade,questao,A,B,C,D,E,resposta,explicacao,tags
+lei8112-001,Lei 8.112/1990,Requisitos para investidura,Fácil,"Segundo a Lei 8.112/1990, é requisito básico para investidura em cargo público a idade mínima de:",16 anos,18 anos,21 anos,25 anos,não há idade mínima,B,"Art. 5º, V: idade mínima de dezoito anos.",banca::Minha_banca origem::inedita gabarito::conferido_no_texto_legal
+lei11892-001,Lei 11.892/2008,Oferta de vagas,Médio,"De acordo com a Lei 11.892/2008, os Institutos Federais devem garantir, para a educação profissional técnica de nível médio, o mínimo de:<br>I. 50% de suas vagas;<br>II. ofertadas prioritariamente na forma integrada.<br>Está correto o que se afirma em:",apenas I,apenas II,I e II,nenhuma,,C,"Art. 8º: no mínimo 50% das vagas para a educação técnica de nível médio, prioritariamente integrada, e 20% para licenciaturas.",origem::inedita gabarito::conferido_no_texto_legal`;
+function backBtn(){return `<div class="backrow"><button class="btn-ghost btn-sm" data-act="back">← Voltar</button></div>`}
+function vAbout(){
+  app.innerHTML=`${backBtn()}
+  <section class="sheet stack doc">
+    <span class="label">Sobre o app</span>
+    <h1>GabaritouIF</h1>
+    <p>Um caderno de questões de legislação para quem estuda para os concursos dos Institutos Federais (Professor EBTT e TAE). Você responde tocando na alternativa, vê na hora se acertou e a explicação, e o app acompanha onde você mais erra.</p>
+    <h2>Como estudar</h2>
+    <ul>
+      <li><b>Revisão do dia:</b> usa repetição espaçada. Questão que você erra volta no dia seguinte; cada acerto seguido aumenta o intervalo (1, 2, 4, 8 e 16 dias). Depois das vencidas, entram as que você nunca viu.</li>
+      <li><b>Não vistas, Só erradas, Todas e Marcadas ★:</b> outros recortes do banco. A estrela marca uma questão durante o estudo.</li>
+      <li><b>Filtros:</b> por norma, dificuldade e origem (prova oficial, inédita, simulado).</li>
+      <li><b>Modo prova:</b> você responde tudo sem ver o gabarito e só confere no final.</li>
+      <li>Errou durante a sessão? A questão volta no fim da mesma sessão para uma nova tentativa (a estatística conta só a primeira resposta).</li>
+    </ul>
+    <h2>Desempenho</h2>
+    <p>A aba Desempenho mostra o acerto por norma (da pior para a melhor; tocar numa norma já filtra o estudo), por dificuldade e por banca, a evolução por sessão e as questões que você mais erra, com a alternativa errada que você costuma marcar.</p>
+    <h2>Seus dados</h2>
+    <ul>
+      <li>O login é com a sua conta Google. O banco de questões e o progresso ficam salvos na sua conta e sincronizam entre celular e computador.</li>
+      <li>Cada conta só enxerga os próprios dados. Quem entrar com outro Gmail começa do zero e importa o próprio CSV.</li>
+      <li>Funciona offline depois do primeiro acesso; o progresso é enviado quando a internet voltar.</li>
+      <li>No celular, use o menu do Chrome > <b>Instalar app</b> (ou Adicionar à tela inicial).</li>
+    </ul>
+    <h2>Questões e créditos</h2>
+    <p>As questões vêm do banco que cada pessoa importa. O banco público do projeto, com a origem de cada questão, está no <a href="https://github.com/mh-pedro/gabaritouif/tree/main/banco" target="_blank" rel="noopener">repositório no GitHub</a>. Encontrou erro de gabarito? Abra uma <i>issue</i> lá.</p>
+    <p class="muted" style="font-size:.85rem">Criado por Pedro Henrique Morais.</p>
+  </section>
+  <button data-act="csvhelp">Como criar questões (CSV) →</button>`;
+}
+function vCsvHelp(){
+  const cols=[
+    ['id','Sim','Código único da questão. Mantenha o mesmo id ao atualizar o arquivo: é ele que liga a questão ao seu histórico.'],
+    ['assunto','Sim','A norma. Vira o filtro "Norma" e a análise por norma. Ex.: Lei 8.112/1990'],
+    ['tema','Não','Assunto dentro da norma. Ex.: Estágio probatório'],
+    ['dificuldade','Não','Fácil, Médio ou Difícil (vazio conta como Médio).'],
+    ['questao','Sim','O enunciado. Use &lt;br&gt; para quebrar linha. Um texto entre colchetes no início, como [IFMG, 2025, Professor EBTT], aparece como fonte.'],
+    ['A a E','A e B','As alternativas. C, D e E podem ficar vazias para questões com menos opções.'],
+    ['resposta','Sim','Só a letra da correta: A, B, C, D ou E.'],
+    ['explicacao','Não','Aparece depois de responder. Vale citar o artigo.'],
+    ['tags','Não','Pares chave::valor separados por espaço. Use banca:: (análise por banca), origem:: (prova_oficial, inedita, simulado_enviado ou banco_csv_usuario) e gabarito:: (oficial ou conferido_no_texto_legal).']
+  ];
+  app.innerHTML=`${backBtn()}
+  <section class="sheet stack doc">
+    <span class="label">Banco de questões</span>
+    <h1>Como criar questões em CSV</h1>
+    <p>O banco é uma planilha com uma questão por linha. O jeito mais fácil é montar no Google Planilhas ou no Excel e salvar como <b>CSV (UTF-8)</b>. Separador vírgula ou ponto e vírgula, os dois funcionam.</p>
+    <h2>Colunas</h2>
+    <p>A primeira linha é o cabeçalho, exatamente assim:</p>
+    <pre class="csv">id,assunto,tema,dificuldade,questao,A,B,C,D,E,resposta,explicacao,tags</pre>
+    <div class="ctable"><table><thead><tr><th>Coluna</th><th>Obrigatória</th><th>O que vai nela</th></tr></thead>
+    <tbody>${cols.map(c=>`<tr><td>${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td></tr>`).join('')}</tbody></table></div>
+    <h2>Exemplo</h2>
+    <p>Duas questões: uma simples e uma com afirmativas em linhas separadas e só quatro alternativas.</p>
+    <pre class="csv">${esc(MODEL)}</pre>
+    <div class="row"><button data-act="dlmodel">Baixar este exemplo (.csv)</button><button class="btn-ghost" data-act="copymodel">Copiar</button></div>
+    <h2>Cuidados</h2>
+    <ul>
+      <li>Texto com vírgula precisa ficar entre aspas: <code>"Art. 5º, V: idade mínima"</code>. As planilhas fazem isso sozinhas ao salvar como CSV.</li>
+      <li>Aspas dentro do texto são escritas dobradas: <code>""</code>.</li>
+      <li>Não deixe dois ids iguais; a linha repetida é ignorada.</li>
+      <li>Se as letras acentuadas aparecerem estranhas, salve de novo escolhendo <b>CSV UTF-8</b>.</li>
+      <li>Para criar muitas questões de uma vez, peça a uma IA: "converta estas questões para um CSV com as colunas id,assunto,tema,dificuldade,questao,A,B,C,D,E,resposta,explicacao,tags".</li>
+    </ul>
+    <h2>Importar</h2>
+    <p>Toque no seu avatar > <b>Atualizar banco (CSV)</b> e escolha o arquivo. O app mostra quantas questões reconheceu e aponta as linhas com problema antes de salvar.</p>
+  </section>
+  ${user?'<button class="btn-primary" data-act="import">Importar um CSV agora</button>':''}`;
+}
+function openInfo(v){if(view!=='about'&&view!=='csvhelp')backView=view;menuEl.hidden=true;view=v;render();window.scrollTo(0,0)}
+function download(name,text){
+  const url=URL.createObjectURL(new Blob(['﻿'+text],{type:'text/csv;charset=utf-8'}));
+  const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2000);
+}
+
 /* ---------- account menu ---------- */
 function showMenu(){
   if(!menuEl.hidden){menuEl.hidden=true;return}
   menuEl.innerHTML=`<b>${esc(user.displayName||'Sua conta')}</b><small>${esc(user.email||'')}</small>
     <button data-act="import">Atualizar banco (CSV)</button>
+    <button class="btn-ghost" data-act="about">Sobre o app</button>
+    <button class="btn-ghost" data-act="csvhelp">Como criar questões (CSV)</button>
     <button class="btn-ghost" data-act="logout">Sair</button>`;
   menuEl.hidden=false;
 }
@@ -592,6 +693,11 @@ document.addEventListener('click',e=>{
   else if(a==='reload')location.reload();
   else if(a==='import'){menuEl.hidden=true;importState=null;go('import')}
   else if(a==='saveBank')saveBank(b);
+  else if(a==='about'||a==='csvhelp')openInfo(a);
+  else if(a==='back'){view=(backView==='study'&&!session)?'home':backView;render();window.scrollTo(0,0)}
+  else if(a==='dlmodel'){download('modelo_gabaritouif.csv',MODEL);toast('Modelo baixado')}
+  else if(a==='copymodel'){try{navigator.clipboard.writeText(MODEL).then(()=>toast('Exemplo copiado'),()=>toast('Não consegui copiar; use o botão Baixar'))}catch(e){toast('Não consegui copiar; use o botão Baixar')}}
+  else if(a==='home'&&(view==='about'||view==='csvhelp')){view=phase==='app'?'home':'home';render()}
   else if(phase!=='app')return;
   else if(a==='home'){if(view==='study'&&session&&(session.results.length||Object.keys(session.answers).length)){finish();return}go('home')}
   else if(a==='tab'){tab=v;render()}
